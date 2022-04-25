@@ -1,0 +1,177 @@
+<template>
+  <div id="app">
+    <header>
+        <h1>{{sitename}}</h1>
+
+      <!-- CHECKOUT BUTTON -->
+      <div class="checkOutBut">
+        <button @click='showCheckout'>
+          {{this.cart.length}} Checkout
+        </button>
+      </div>
+        
+    </header>
+    <div v-if='showProduct'>
+      <product-list :products='products' @addProduct='addToCart'></product-list>
+    </div>
+    <div v-else>
+      <checkout :cart='cart' @removeProduct='removeFromCart'></checkout>
+    </div>
+  </div>
+</template>
+
+<script>
+import productList from './components/productlist.vue'
+import checkout from './components/checkout.vue'
+export default {
+  name: 'App',
+  components: {
+    productList,
+    checkout
+  },
+  data() {
+    return {
+      sitename: "After School Club",
+      cart: [],
+      showProduct: true,
+      products: [
+    {
+      "id": 1,
+      "image": "images/science.jpg",
+      "subject": "Science",
+      "location": "London",
+      "price": 10,
+      "availableInventory": 10,
+      "rating": 3
+    },
+    {
+      "id": 2,
+      "image": "images/english.jpg",
+      "subject": "English",
+      "location": "Dubai",
+      "price": 5,
+      "availableInventory": 7,
+      "rating": 5
+    },
+    {
+      "id": 3,
+      "image": "images/art.jpg",
+      "subject": "Art",
+      "location": "London ",
+      "price": 7.50,
+      "availableInventory": 30,
+      "rating": 2
+    },
+    {
+      "id": 4,
+      "image": "images/ict.jpg",
+      "subject": "ICT",
+      "location": "Malta",
+      "price": 8.50,
+      "availableInventory": 11,
+      "rating": 5
+    },
+    {
+      "id": 5,
+      "image": "images/math.jpg",
+      "subject": "Math",
+      "location": "Dubai",
+      "price": 4.99,
+      "availableInventory": 25,
+      "rating": 5
+  },
+    {
+      "id": 6,
+      "image": "images/french.jpg",
+      "subject": "French",
+      "location": "London",
+      "price": 9,
+      "availableInventory": 25,
+      "rating": 4
+  },
+    {
+      "id": 7,
+      "image": "images/pe.jpg",
+      "subject": "Physical Education",
+      "location": "London",
+      "price": 4,
+      "availableInventory": 9,
+      "rating": 5
+  },
+    {
+      "id": 8,
+      "image": "images/geo.jpg",
+      "subject": "Geography",
+      "location": "Dubai",
+      "price": 3,
+      "availableInventory": 11,
+      "rating": 3
+  },
+    {
+      "id": 9,
+      "image": "images/history.jpg",
+      "subject": "History",
+      "location": "Malta",
+      "price": 8,
+      "availableInventory": 13,
+      "rating": 3
+  },
+  {
+      "id": 10,
+      "image": "images/music.jpg",
+      "subject": "Music",
+      "location": "Dubai",
+      "price": 20,
+      "availableInventory": 15,
+      "rating": 4
+    }
+    
+  ]
+    };
+  },
+  methods: {
+    showCheckout: function(){
+      this.showProduct = this.showProduct ? false : true;
+      },
+      addToCart(product) {
+        let added = false;
+        this.cart.forEach((product2) => {
+          if (product2.id === product.id) {
+            product.inCart++;
+            added = true;
+          }
+        });
+        if (!added) {
+        this.cart.push(product)
+        product.inCart = 1;
+        }
+        product.availableInventory --
+      },
+      removeFromCart(product) {
+        this.cart.forEach(product2 => {
+          if (product2.id === product.id) {
+            product.availableInventory ++;
+            product.inCart --;
+            if (product.inCart == 0) {
+            this.cart.splice(this.cart.indexOf(product), 1)
+            }
+          }
+      });
+    },
+  }
+}
+</script>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+#productLists {
+    box-sizing: border-box;
+  }
+</style>
